@@ -13,7 +13,7 @@
         <nav class="navbar">
             <div class="container">
                 <div class="logo">
-                    <img src="galeria/image1.jpeg" alt="COMPUTEC Logo" class="logo-image">
+                    <img src="galeria/LogoLimpio4.png" alt="COMPUTEC Logo" class="logo-image">
                     
                 </div>
                 <ul class="nav-menu">
@@ -734,8 +734,10 @@
     <section id="contacto" class="contact">
         <div class="container">
             <h2>Contáctanos</h2>
-            <div class="contact-content-centered">
-                <div class="contact-info">
+            <p class="section-intro">¿Tienes preguntas sobre nuestros cursos? ¡Escríbenos!</p>
+            
+            <div class="contact-wrapper">
+                <div class="contact-info-section">
                     <div class="info-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
@@ -749,6 +751,97 @@
                             <h4>Email</h4>
                             <p>computecpcb@gmail.com</p>
                         </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Teléfono</h4>
+                            <p>(787) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Horario de Atención</h4>
+                            <p>Lunes a Viernes<br>7:00 AM - 3:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form-section">
+                    <form id="contactForm" class="contact-form" onsubmit="submitContactForm(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactName">
+                                    <i class="fas fa-user"></i> Nombre Completo
+                                </label>
+                                <input type="text" id="contactName" name="name" required 
+                                       placeholder="Ingresa tu nombre" autocomplete="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">
+                                    <i class="fas fa-envelope"></i> Correo Electrónico
+                                </label>
+                                <input type="email" id="contactEmail" name="email" required 
+                                       placeholder="tu@email.com" autocomplete="email">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">
+                                    <i class="fas fa-phone"></i> Teléfono (Opcional)
+                                </label>
+                                <input type="tel" id="contactPhone" name="phone" 
+                                       placeholder="(787) 123-4567" autocomplete="tel">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactSubject">
+                                    <i class="fas fa-tag"></i> Asunto
+                                </label>
+                                <select id="contactSubject" name="subject" required>
+                                    <option value="">Selecciona un asunto</option>
+                                    <option value="informacion">Información sobre cursos</option>
+                                    <option value="inscripcion">Inscripción</option>
+                                    <option value="servicio-tecnico">Servicio Técnico</option>
+                                    <option value="sugerencia">Sugerencia</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="contactMessage">
+                                <i class="fas fa-comment"></i> Mensaje
+                            </label>
+                            <textarea id="contactMessage" name="message" required 
+                                      placeholder="Escribe tu mensaje aquí..." rows="5"></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="contactNewsletter" name="newsletter">
+                                <span>Quiero recibir información sobre nuevos cursos y noticias de COMPUTEC</span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </form>
+                    
+                    <div id="formSuccess" class="form-success" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>¡Mensaje Enviado!</h3>
+                        <p>Gracias por contactarnos. Responderemos a tu mensaje lo antes posible.</p>
+                        <button onclick="resetContactForm()" class="reset-btn">Enviar otro mensaje</button>
                     </div>
                 </div>
             </div>

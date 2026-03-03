@@ -566,7 +566,51 @@ window.onclick = function(event) {
     }
 }
 
-// Contact Form - Removed (no longer needed)
+// Contact Form Functions
+function submitContactForm(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    
+    // Get form values
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const phone = document.getElementById('contactPhone').value;
+    const subject = document.getElementById('contactSubject').value;
+    const message = document.getElementById('contactMessage').value;
+    const newsletter = document.getElementById('contactNewsletter').checked;
+    
+    // In a real implementation, you would send this data to a server
+    // For now, we'll simulate a successful submission
+    console.log('Form submitted:', {
+        name: name,
+        email: email,
+        phone: phone,
+        subject: subject,
+        message: message,
+        newsletter: newsletter
+    });
+    
+    // Hide form and show success message
+    form.style.display = 'none';
+    formSuccess.style.display = 'block';
+    
+    // Scroll to success message
+    formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetContactForm() {
+    const form = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    
+    // Reset form
+    form.reset();
+    
+    // Show form and hide success message
+    form.style.display = 'flex';
+    formSuccess.style.display = 'none';
+}
 
 // Tech Service Form - Ya no se usa, redirige a página externa
 // const techServiceForm = document.getElementById('techServiceForm');
