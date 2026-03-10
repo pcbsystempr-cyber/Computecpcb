@@ -18,6 +18,557 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
+// ============================================
+// SISTEMA DE NOTICIAS Y ADMIN PANEL
+// ============================================
+
+// Credenciales de admin (en producción debería usarse autenticación server-side)
+const ADMIN_CREDENTIALS = {
+    username: 'admin',
+    password: 'computec2026'
+};
+
+// Modal de login
+function showAdminModal() {
+    const modal = document.createElement('div');
+    modal.id = 'admin-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeAdminModal(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>Acceso Administrativo</h3>
+                    </div>
+                    <button class="modal-close" onclick="closeAdminModalBtn()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-subtitle">Ingrese sus credenciales para acceder al panel de administración</p>
+                    <form id="modal-login-form">
+                        <div class="form-group">
+                            <label for="modal-username">
+                                <i class="fas fa-user"></i> Usuario
+                            </label>
+                            <input type="text" id="modal-username" placeholder="Ingrese su usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-password">
+                                <i class="fas fa-lock"></i> Contraseña
+                            </label>
+                            <input type="password" id="modal-password" placeholder="Ingrese su contraseña" required>
+                        </div>
+                        <p id="modal-login-error" class="error-message" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i> Usuario o contraseña incorrectos
+                        </p>
+                        <button type="submit" class="btn-primary" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p><i class="fas fa-info-circle"></i> Solo para administradores autorizados</p>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Agregar estilos del modal si no existen
+    if (!document.getElementById('modal-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'modal-styles';
+        styles.textContent = `
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes slideIn {
+                from { transform: translateY(-20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            
+            .modal-content {
+                background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+                border-radius: 16px;
+                width: 90%;
+                max-width: 420px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+                overflow: hidden;
+                animation: slideIn 0.3s ease;
+            }
+            
+            .modal-header {
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+                padding: 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .modal-title {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .modal-title i {
+                font-size: 1.8rem;
+                color: white;
+            }
+            
+            .modal-title h3 {
+                color: white;
+                margin: 0;
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+            
+            .modal-close {
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                font-size: 1.2rem;
+                cursor: pointer;
+                color: white;
+                transition: all 0.3s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .modal-close:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: rotate(90deg);
+            }
+            
+            .modal-body {
+                padding: 2rem;
+            }
+            
+            .modal-subtitle {
+                color: #6c757d;
+                text-align: center;
+                margin-bottom: 1.5rem;
+                font-size: 0.95rem;
+            }
+            
+            .modal-body .form-group {
+                margin-bottom: 1.2rem;
+            }
+            
+            .modal-body .form-group label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #333;
+                font-size: 0.9rem;
+            }
+            
+            .modal-body .form-group label i {
+                color: #0ea5e9;
+                width: 16px;
+            }
+            
+            .modal-body .form-group input {
+                width: 100%;
+                padding: 12px 15px;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                font-size: 1rem;
+                transition: all 0.3s;
+                box-sizing: border-box;
+            }
+            
+            .modal-body .form-group input:focus {
+                outline: none;
+                border-color: #0ea5e9;
+                box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+            }
+            
+            .modal-body .form-group input::placeholder {
+                color: #adb5bd;
+            }
+            
+            .modal-body .error-message {
+                background: #fee2e2;
+                color: #dc2626;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .modal-body .btn-primary {
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+                color: white;
+                padding: 14px 24px;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+            
+            .modal-body .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            }
+            
+            .modal-footer {
+                background: #f8f9fa;
+                padding: 1rem;
+                text-align: center;
+                border-top: 1px solid #e9ecef;
+            }
+            
+            .modal-footer p {
+                color: #6c757d;
+                font-size: 0.85rem;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+            }
+            
+            .modal-footer p i {
+                color: #0ea5e9;
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+    
+    // Event listener para el formulario
+    document.getElementById('modal-login-form').addEventListener('submit', handleModalLogin);
+}
+
+// Cerrar modal
+function closeAdminModal(event) {
+    if (event.target.classList.contains('modal-overlay')) {
+        document.getElementById('admin-modal').remove();
+    }
+}
+
+function closeAdminModalBtn() {
+    const modal = document.getElementById('admin-modal');
+    if (modal) modal.remove();
+}
+
+// Manejar login desde modal
+function handleModalLogin(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('modal-username').value;
+    const password = document.getElementById('modal-password').value;
+    const errorMsg = document.getElementById('modal-login-error');
+    
+    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        errorMsg.style.display = 'none';
+        closeAdminModalBtn();
+        // Redirigir a admin.html
+        window.location.href = 'admin.html';
+    } else {
+        errorMsg.style.display = 'block';
+    }
+}
+
+// Hacer visible el panel de admin cuando se hace clic en el enlace
+document.addEventListener('DOMContentLoaded', function() {
+    const adminNavLink = document.getElementById('admin-nav-link');
+    
+    if (adminNavLink) {
+        adminNavLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAdminModal();
+        });
+    }
+});
+
+// Inicializar noticias si no existen
+function initializeNews() {
+    const defaultNews = [
+        {
+            id: 1,
+            title: 'Próximo Gaming Day',
+            date: '2026-02-13',
+            content: '¡Se acerca el Gaming Day 2026! Torneos de videojuegos, premios increíbles, música y entretenimiento. Regístrate y participa en el evento gaming más esperado del año.',
+            featured: true
+        },
+        {
+            id: 2,
+            title: 'PCB System - Página Principal de la Escuela',
+            date: '2026-01-10',
+            content: 'Estudiantes de COMPUTEC desarrollan la página web oficial de la Escuela Superior Vocacional Pablo Colón Berdecía.',
+            featured: false
+        },
+        {
+            id: 3,
+            title: 'Taller de Inteligencia Artificial para Maestros',
+            date: '2026-01-30',
+            content: 'Taller especializado de Inteligencia Artificial dirigido a maestros de la escuela. Aprende sobre IA, herramientas educativas y cómo integrar la tecnología en el salón de clases.',
+            featured: false
+        }
+    ];
+    
+    if (!localStorage.getItem('news')) {
+        localStorage.setItem('news', JSON.stringify(defaultNews));
+    }
+}
+
+// Obtener noticias desde localStorage
+function getNews() {
+    const news = localStorage.getItem('news');
+    return news ? JSON.parse(news) : [];
+}
+
+// Guardar noticias en localStorage
+function saveNews(news) {
+    localStorage.setItem('news', JSON.stringify(news));
+}
+
+// Renderizar noticias en la página principal
+function renderNews() {
+    const newsGrid = document.getElementById('news-grid');
+    if (!newsGrid) return;
+    
+    const news = getNews();
+    
+    if (news.length === 0) {
+        newsGrid.innerHTML = '<p style="text-align: center; color: #666;">No hay noticias disponibles.</p>';
+        return;
+    }
+    
+    // Ordenar por fecha (más reciente primero)
+    news.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    newsGrid.innerHTML = news.map((item, index) => `
+        <article class="news-card ${item.featured ? 'featured' : ''}">
+            ${item.featured ? '<div class="news-badge">Destacado</div>' : ''}
+            <div class="news-image">
+                <i class="fas fa-newspaper"></i>
+            </div>
+            <div class="news-content">
+                <span class="news-date"><i class="far fa-calendar"></i> ${formatDate(item.date)}</span>
+                <h3>${item.title}</h3>
+                <p>${item.content}</p>
+            </div>
+        </article>
+    `).join('');
+}
+
+// Formatear fecha
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('es-ES', options);
+}
+
+// ============================================
+// ADMIN PANEL FUNCTIONS
+// ============================================
+
+// Verificar si el usuario está logueado
+function isLoggedIn() {
+    return localStorage.getItem('adminLoggedIn') === 'true';
+}
+
+// Mostrar panel de admin según estado de login
+function updateAdminPanel() {
+    const adminLogin = document.getElementById('admin-login');
+    const adminContent = document.getElementById('admin-content');
+    const adminPanel = document.getElementById('admin-panel');
+    
+    if (!adminLogin || !adminContent) return;
+    
+    if (isLoggedIn()) {
+        adminLogin.style.display = 'none';
+        adminContent.style.display = 'block';
+        renderAdminNewsList();
+    } else {
+        adminLogin.style.display = 'block';
+        adminContent.style.display = 'none';
+    }
+}
+
+// Manejar login
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('login-error');
+    
+    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        errorMsg.style.display = 'none';
+        updateAdminPanel();
+    } else {
+        errorMsg.style.display = 'block';
+    }
+}
+
+// Manejar logout
+function handleLogout() {
+    localStorage.removeItem('adminLoggedIn');
+    updateAdminPanel();
+    document.getElementById('login-form').reset();
+}
+
+// Renderizar lista de noticias en admin
+function renderAdminNewsList() {
+    const newsList = document.getElementById('admin-news-list');
+    if (!newsList) return;
+    
+    const news = getNews();
+    
+    if (news.length === 0) {
+        newsList.innerHTML = '<p>No hay noticias. Agrega una nueva noticia.</p>';
+        return;
+    }
+    
+    news.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    newsList.innerHTML = news.map(item => `
+        <div class="news-list-item">
+            <div class="news-info">
+                <h5>${item.title}</h5>
+                <span>${formatDate(item.date)} ${item.featured ? '(Destacado)' : ''}</span>
+            </div>
+            <div class="news-actions">
+                <button class="btn-edit" onclick="editNews(${item.id})">Editar</button>
+                <button class="btn-delete" onclick="deleteNews(${item.id})">Eliminar</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Guardar noticia (crear o editar)
+function handleNewsSubmit(event) {
+    event.preventDefault();
+    
+    const id = document.getElementById('news-id').value;
+    const title = document.getElementById('news-title').value;
+    const date = document.getElementById('news-date').value;
+    const content = document.getElementById('news-content').value;
+    const featured = document.getElementById('news-featured').checked;
+    
+    let news = getNews();
+    
+    if (id) {
+        // Editar noticia existente
+        const index = news.findIndex(n => n.id === parseInt(id));
+        if (index !== -1) {
+            news[index] = { id: parseInt(id), title, date, content, featured };
+        }
+    } else {
+        // Crear nueva noticia
+        const newId = news.length > 0 ? Math.max(...news.map(n => n.id)) + 1 : 1;
+        news.push({ id: newId, title, date, content, featured });
+    }
+    
+    saveNews(news);
+    renderNews();
+    renderAdminNewsList();
+    resetNewsForm();
+}
+
+// Editar noticia
+function editNews(id) {
+    const news = getNews();
+    const item = news.find(n => n.id === id);
+    
+    if (item) {
+        document.getElementById('news-id').value = item.id;
+        document.getElementById('news-title').value = item.title;
+        document.getElementById('news-date').value = item.date;
+        document.getElementById('news-content').value = item.content;
+        document.getElementById('news-featured').checked = item.featured;
+        
+        document.getElementById('form-title').textContent = 'Editar Noticia';
+        document.getElementById('cancel-edit').style.display = 'inline-block';
+    }
+}
+
+// Eliminar noticia
+function deleteNews(id) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta noticia?')) {
+        let news = getNews();
+        news = news.filter(n => n.id !== id);
+        saveNews(news);
+        renderNews();
+        renderAdminNewsList();
+    }
+}
+
+// Resetear formulario
+function resetNewsForm() {
+    document.getElementById('news-form').reset();
+    document.getElementById('news-id').value = '';
+    document.getElementById('form-title').textContent = 'Agregar Nueva Noticia';
+    document.getElementById('cancel-edit').style.display = 'none';
+}
+
+// Cancelar edición
+function cancelEdit() {
+    resetNewsForm();
+}
+
+// Inicializar todo
+document.addEventListener('DOMContentLoaded', function() {
+    initializeNews();
+    renderNews();
+    updateAdminPanel();
+    
+    // Event listeners del admin
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+    
+    const newsForm = document.getElementById('news-form');
+    if (newsForm) {
+        newsForm.addEventListener('submit', handleNewsSubmit);
+    }
+    
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+    
+    const cancelEditBtn = document.getElementById('cancel-edit');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', cancelEdit);
+    }
+});
+
 // Theme Toggle (Dark/Light Mode)
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;

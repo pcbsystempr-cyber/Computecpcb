@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - COMPUTEC</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #0d3b4f 50%, #0f5257 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .admin-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            color: #0ea5e9;
+            font-size: 1.5rem;
+        }
+
+        .back-btn {
+            background: #0ea5e9;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #0284c7;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .admin-content {
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .admin-header-section h2 {
+            color: #0ea5e9;
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .news-form-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .news-form-section h3 {
+            color: #0ea5e9;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+
+        .form-group input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #0ea5e9;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #0284c7;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #000;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .news-list-section h3 {
+            color: #0ea5e9;
+            margin-bottom: 1rem;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .news-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+        }
+
+        .news-info {
+            flex: 1;
+        }
+
+        .news-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+
+        .news-info span {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .news-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #666;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <h1><i class="fas fa-cog"></i> Panel de Administración - COMPUTEC</h1>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al sitio</a>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-content">
+            <div class="admin-header-section">
+                <h2>Gestión de Noticias</h2>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+
+            <div class="news-form-section">
+                <h3 id="form-title">Agregar Nueva Noticia</h3>
+                <form id="news-form">
+                    <input type="hidden" id="news-id">
+                    <div class="form-group">
+                        <label for="news-title">Título:</label>
+                        <input type="text" id="news-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-date">Fecha:</label>
+                        <input type="date" id="news-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-content">Contenido:</label>
+                        <textarea id="news-content" name="content" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-featured">
+                            <input type="checkbox" id="news-featured" name="featured">
+                            Destacado
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Guardar</button>
+                        <button type="button" id="cancel-edit" class="btn-secondary" style="display: none;" onclick="resetForm()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="news-list-section">
+                <h3>Noticias Existentes</h3>
+                <div id="admin-news-list" class="news-list">
+                    <!-- Lista de noticias -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar si el usuario está logueado
+        function checkAuth() {
+            if (localStorage.getItem('adminLoggedIn') !== 'true') {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Credenciales de admin
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'computec2026'
+        };
+
+        // Obtener noticias
+        function getNews() {
+            const news = localStorage.getItem('news');
+            return news ? JSON.parse(news) : [];
+        }
+
+        // Guardar noticias
+        function saveNews(news) {
+            localStorage.setItem('news', JSON.stringify(news));
+        }
+
+        // Renderizar lista de noticias
+        function renderNewsList() {
+            const newsList = document.getElementById('admin-news-list');
+            const news = getNews();
+
+            if (news.length === 0) {
+                newsList.innerHTML = '<p class="empty-message">No hay noticias. Agrega una nueva noticia.</p>';
+                return;
+            }
+
+            news.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            newsList.innerHTML = news.map(item => `
+                <div class="news-item">
+                    <div class="news-info">
+                        <h4>${item.title}</h4>
+                        <span>${formatDate(item.date)} ${item.featured ? '(Destacado)' : ''}</span>
+                    </div>
+                    <div class="news-actions">
+                        <button class="btn-edit" onclick="editNews(${item.id})">Editar</button>
+                        <button class="btn-delete" onclick="deleteNews(${item.id})">Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Formatear fecha
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('es-ES', options);
+        }
+
+        // Guardar noticia (crear o editar)
+        document.getElementById('news-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('news-id').value;
+            const title = document.getElementById('news-title').value;
+            const date = document.getElementById('news-date').value;
+            const content = document.getElementById('news-content').value;
+            const featured = document.getElementById('news-featured').checked;
+
+            let news = getNews();
+
+            if (id) {
+                // Editar noticia existente
+                const index = news.findIndex(n => n.id === parseInt(id));
+                if (index !== -1) {
+                    news[index] = { id: parseInt(id), title, date, content, featured };
+                }
+            } else {
+                // Crear nueva noticia
+                const newId = news.length > 0 ? Math.max(...news.map(n => n.id)) + 1 : 1;
+                news.push({ id: newId, title, date, content, featured });
+            }
+
+            saveNews(news);
+            renderNewsList();
+            resetForm();
+        });
+
+        // Editar noticia
+        function editNews(id) {
+            const news = getNews();
+            const item = news.find(n => n.id === id);
+
+            if (item) {
+                document.getElementById('news-id').value = item.id;
+                document.getElementById('news-title').value = item.title;
+                document.getElementById('news-date').value = item.date;
+                document.getElementById('news-content').value = item.content;
+                document.getElementById('news-featured').checked = item.featured;
+
+                document.getElementById('form-title').textContent = 'Editar Noticia';
+                document.getElementById('cancel-edit').style.display = 'inline-block';
+            }
+        }
+
+        // Eliminar noticia
+        function deleteNews(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta noticia?')) {
+                let news = getNews();
+                news = news.filter(n => n.id !== id);
+                saveNews(news);
+                renderNewsList();
+            }
+        }
+
+        // Resetear formulario
+        function resetForm() {
+            document.getElementById('news-form').reset();
+            document.getElementById('news-id').value = '';
+            document.getElementById('form-title').textContent = 'Agregar Nueva Noticia';
+            document.getElementById('cancel-edit').style.display = 'none';
+        }
+
+        // Cerrar sesión
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'index.html';
+        }
+
+        // Inicializar
+        checkAuth();
+        renderNewsList();
+    </script>
+</body>
+</html>

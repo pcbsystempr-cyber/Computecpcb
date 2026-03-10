@@ -206,12 +206,14 @@ header {
     z-index: 2;
     max-width: 800px;
     margin: 0 auto;
+    color: #0ea5e9;
 }
 
 .hero h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
     animation: fadeInUp 1s ease;
+    color: #0ea5e9;
 }
 
 .subtitle {
@@ -219,6 +221,7 @@ header {
     margin-bottom: 1rem;
     opacity: 0.9;
     animation: fadeInUp 1s ease 0.2s backwards;
+    color: #0ea5e9;
 }
 
 .description {
@@ -226,6 +229,7 @@ header {
     margin-bottom: 2rem;
     opacity: 0.8;
     animation: fadeInUp 1s ease 0.4s backwards;
+    color: #0ea5e9;
 }
 
 .cta-button {
@@ -982,6 +986,7 @@ header {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 3rem;
+    color: #0ea5e9;
 }
 
 .gaming-content {
@@ -994,6 +999,7 @@ header {
 .gaming-info h3 {
     font-size: 2rem;
     margin-bottom: 1rem;
+    color: #0ea5e9;
 }
 
 .gaming-info p {
@@ -1001,6 +1007,7 @@ header {
     line-height: 1.8;
     margin-bottom: 2rem;
     opacity: 0.9;
+    color: #0ea5e9;
 }
 
 .gaming-features {
@@ -1017,6 +1024,7 @@ header {
     background: rgba(255,255,255,0.1);
     padding: 1rem;
     border-radius: 10px;
+    color: #0ea5e9;
 }
 
 .feature-item i {
@@ -2103,7 +2111,237 @@ header {
     box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
 }
 
-/* Footer */
+/* Admin Panel */
+.admin-panel {
+    padding: 80px 20px;
+    background: var(--light-bg);
+}
+
+.admin-panel .container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.admin-panel h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+.admin-login {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.admin-login h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: var(--secondary-color);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-edit {
+    background: #ffc107;
+    color: #000;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.btn-edit:hover {
+    background: #e0a800;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #c82333;
+}
+
+.error-message {
+    color: #dc3545;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.admin-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+}
+
+.admin-header h3 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.admin-form {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.admin-form h4 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.admin-list h4 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.news-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.news-list-item .news-info {
+    flex: 1;
+}
+
+.news-list-item .news-info h5 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+}
+
+.news-list-item .news-info span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.news-list-item .news-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Link to admin panel in nav */
+.admin-link {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+}
+
+.admin-btn {
+    background: var(--primary-color);
+    color: white !important;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-btn:hover {
+    background: var(--secondary-color);
+}
 footer {
     background: var(--dark-bg);
     color: var(--white);
