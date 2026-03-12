@@ -392,6 +392,228 @@ function formatDate(dateString) {
 }
 
 // ============================================
+// GALLERY SYSTEM
+// ============================================
+
+// Default gallery images
+const defaultGalleryImages = [
+    {
+        id: 1,
+        src: 'galeria/LogoLimpio4.png',
+        alt: 'Logo de COMPUTEC',
+        description: 'Logo oficial de la Escuela Superior Vocacional Pablo Colón Berdecía'
+    }
+];
+
+// Get gallery images from localStorage
+function getGalleryImages() {
+    const images = localStorage.getItem('galleryImages');
+    return images ? JSON.parse(images) : defaultGalleryImages;
+}
+
+// Save gallery images to localStorage
+function saveGalleryImages(images) {
+    localStorage.setItem('galleryImages', JSON.stringify(images));
+}
+
+// Get gallery settings
+function getGallerySettings() {
+    const settings = localStorage.getItem('gallerySettings');
+    return settings ? JSON.parse(settings) : { transitionTime: 5000 };
+}
+
+// Save gallery settings
+function saveGallerySettings(settings) {
+    localStorage.setItem('gallerySettings', JSON.stringify(settings));
+}
+
+// Initialize gallery
+function initializeGallery() {
+    if (!localStorage.getItem('galleryImages')) {
+        saveGalleryImages(defaultGalleryImages);
+    }
+    if (!localStorage.getItem('gallerySettings')) {
+        saveGallerySettings({ transitionTime: 5000 });
+    }
+}
+
+// Carousel state
+let currentSlide = 0;
+let carouselInterval = null;
+
+// Render gallery carousel
+function renderGallery() {
+    const carousel = document.getElementById('gallery-carousel');
+    const indicators = document.getElementById('carousel-indicators');
+    const thumbnails = document.getElementById('gallery-thumbnails');
+    
+    if (!carousel) return;
+    
+    const images = getGalleryImages();
+    const settings = getGallerySettings();
+    
+    if (images.length === 0) {
+        carousel.innerHTML = `
+            <div class="gallery-empty">
+                <i class="fas fa-images"></i>
+                <p>No hay imágenes en la galería</p>
+            </div>
+        `;
+        if (indicators) indicators.innerHTML = '';
+        if (thumbnails) thumbnails.innerHTML = '';
+        return;
+    }
+    
+    // Render slides
+    carousel.innerHTML = images.map((img, index) => `
+        <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+            <img src="${img.src}" alt="${img.alt}" loading="${index < 3 ? 'eager' : 'lazy'}">
+            ${img.description ? `
+                <div class="carousel-content">
+                    <h3>${img.alt}</h3>
+                    <p>${img.description}</p>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+    
+    // Render indicators
+    if (indicators) {
+        indicators.innerHTML = images.map((_, index) => `
+            <div class="carousel-indicator ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
+        `).join('');
+        
+        // Add click handlers to indicators
+        indicators.querySelectorAll('.carousel-indicator').forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                goToSlide(parseInt(indicator.dataset.index));
+            });
+        });
+    }
+    
+    // Render thumbnails
+    if (thumbnails) {
+        thumbnails.innerHTML = images.map((img, index) => `
+            <div class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+                <img src="${img.src}" alt="${img.alt}">
+            </div>
+        `).join('');
+        
+        // Add click handlers to thumbnails
+        thumbnails.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                goToSlide(parseInt(thumb.dataset.index));
+            });
+        });
+    }
+    
+    // Setup navigation buttons
+    setupCarouselNavigation();
+    
+    // Start auto-advance
+    startCarouselAutoAdvance(settings.transitionTime);
+}
+
+// Setup carousel navigation
+function setupCarouselNavigation() {
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    
+    if (prevBtn) {
+        prevBtn.onclick = () => {
+            const images = getGalleryImages();
+            currentSlide = (currentSlide - 1 + images.length) % images.length;
+            updateSlide();
+        };
+    }
+    
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            const images = getGalleryImages();
+            currentSlide = (currentSlide + 1) % images.length;
+            updateSlide();
+        };
+    }
+}
+
+// Go to specific slide
+function goToSlide(index) {
+    const images = getGalleryImages();
+    if (index >= 0 && index < images.length) {
+        currentSlide = index;
+        updateSlide();
+        
+        // Reset auto-advance timer
+        const settings = getGallerySettings();
+        startCarouselAutoAdvance(settings.transitionTime);
+    }
+}
+
+// Update slide display
+function updateSlide() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.carousel-indicator');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    
+    slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+    });
+    
+    indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentSlide);
+    });
+    
+    thumbnails.forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentSlide);
+    });
+}
+
+// Start auto-advance
+function startCarouselAutoAdvance(intervalTime) {
+    if (carouselInterval) {
+        clearInterval(carouselInterval);
+    }
+    
+    carouselInterval = setInterval(() => {
+        const images = getGalleryImages();
+        if (images.length > 1) {
+            currentSlide = (currentSlide + 1) % images.length;
+            updateSlide();
+        }
+    }, intervalTime);
+}
+
+// Stop auto-advance
+function stopCarouselAutoAdvance() {
+    if (carouselInterval) {
+        clearInterval(carouselInterval);
+        carouselInterval = null;
+    }
+}
+
+// Render additional images in teacher gallery section
+function renderTeacherGallery() {
+    const galleryGrid = document.getElementById('teacher-gallery-grid');
+    if (!galleryGrid) return;
+    
+    const images = getGalleryImages();
+    
+    if (images.length === 0) {
+        galleryGrid.innerHTML = '<p style="text-align: center; color: #666;">No hay imágenes disponibles</p>';
+        return;
+    }
+    
+    // Show up to 4 images in a grid (or fewer if less available)
+    const displayImages = images.slice(0, 4);
+    
+    galleryGrid.innerHTML = displayImages.map((img, index) => `
+        <div class="teacher-gallery-item">
+            <img src="${img.src}" alt="${img.alt}" loading="lazy">
+        </div>
+    `).join('');
+}
+
+// ============================================
 // ADMIN PANEL FUNCTIONS
 // ============================================
 
@@ -541,11 +763,351 @@ function cancelEdit() {
     resetNewsForm();
 }
 
+// ============================================
+// ADMIN GALLERY MANAGEMENT
+// ============================================
+
+// Render gallery management list in admin
+function renderAdminGalleryList() {
+    const galleryList = document.getElementById('admin-gallery-list');
+    if (!galleryList) return;
+    
+    const images = getGalleryImages();
+    
+    if (images.length === 0) {
+        galleryList.innerHTML = '<p class="empty-message">No hay imágenes. Agrega nuevas imágenes.</p>';
+        return;
+    }
+    
+    galleryList.innerHTML = images.map((img, index) => `
+        <div class="gallery-image-item" draggable="true" data-id="${img.id}">
+            <div class="image-preview">
+                <img src="${img.src}" alt="${img.alt}">
+            </div>
+            <div class="image-details">
+                <input type="text" 
+                       placeholder="Texto alternativo (alt)" 
+                       value="${img.alt}" 
+                       onchange="updateImageData(${img.id}, 'alt', this.value)">
+                <textarea 
+                    placeholder="Descripción de la imagen"
+                    onchange="updateImageData(${img.id}, 'description', this.value)">${img.description || ''}</textarea>
+            </div>
+            <div class="image-actions">
+                <button class="btn btn-move-up" onclick="moveImage(${img.id}, -1)" ${index === 0 ? 'disabled' : ''} title="Mover arriba">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+                <button class="btn btn-move-down" onclick="moveImage(${img.id}, 1)" ${index === images.length - 1 ? 'disabled' : ''} title="Mover abajo">
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+                <button class="btn btn-delete-image" onclick="deleteGalleryImage(${img.id})" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+    
+    // Setup drag and drop
+    setupGalleryDragAndDrop();
+}
+
+// Setup drag and drop for gallery images
+function setupGalleryDragAndDrop() {
+    const items = document.querySelectorAll('.gallery-image-item');
+    let draggedItem = null;
+    
+    items.forEach(item => {
+        item.addEventListener('dragstart', function(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        item.addEventListener('dragend', function() {
+            this.classList.remove('dragging');
+            draggedItem = null;
+            renderAdminGalleryList();
+        });
+        
+        item.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        });
+        
+        item.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (draggedItem && draggedItem !== this) {
+                const images = getGalleryImages();
+                const fromId = parseInt(draggedItem.dataset.id);
+                const toId = parseInt(this.dataset.id);
+                
+                const fromIndex = images.findIndex(img => img.id === fromId);
+                const toIndex = images.findIndex(img => img.id === toId);
+                
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    const [movedItem] = images.splice(fromIndex, 1);
+                    images.splice(toIndex, 0, movedItem);
+                    saveGalleryImages(images);
+                    renderAdminGalleryList();
+                }
+            }
+        });
+    });
+}
+
+// Update image data (alt text or description)
+function updateImageData(id, field, value) {
+    const images = getGalleryImages();
+    const index = images.findIndex(img => img.id === id);
+    
+    if (index !== -1) {
+        images[index][field] = value;
+        saveGalleryImages(images);
+    }
+}
+
+// Move image up or down
+function moveImage(id, direction) {
+    const images = getGalleryImages();
+    const index = images.findIndex(img => img.id === id);
+    
+    if (index !== -1) {
+        const newIndex = index + direction;
+        if (newIndex >= 0 && newIndex < images.length) {
+            const [movedItem] = images.splice(index, 1);
+            images.splice(newIndex, 0, movedItem);
+            saveGalleryImages(images);
+            renderAdminGalleryList();
+        }
+    }
+}
+
+// Delete image from gallery
+function deleteGalleryImage(id) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta imagen de la galería?')) {
+        let images = getGalleryImages();
+        images = images.filter(img => img.id !== id);
+        saveGalleryImages(images);
+        renderAdminGalleryList();
+    }
+}
+
+// Handle image upload
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        alert('Por favor selecciona un archivo de imagen válido.');
+        return;
+    }
+    
+    // Check file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        alert('La imagen es muy grande. El tamaño máximo es 10MB.');
+        return;
+    }
+    
+    // Check if already have 20 images
+    const images = getGalleryImages();
+    if (images.length >= 20) {
+        alert('Has alcanzado el límite máximo de 20 imágenes.');
+        return;
+    }
+    
+    // Optimize and save image
+    optimizeAndSaveImage(file);
+}
+
+// Optimize image before saving
+function optimizeAndSaveImage(file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const img = new Image();
+        
+        img.onload = function() {
+            // Create canvas for resizing
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            
+            // Max dimensions for optimization
+            const maxWidth = 1920;
+            const maxHeight = 1080;
+            
+            // Calculate new dimensions while maintaining aspect ratio
+            if (width > maxWidth || height > maxHeight) {
+                const ratio = Math.min(maxWidth / width, maxHeight / height);
+                width = Math.round(width * ratio);
+                height = Math.round(height * ratio);
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Get optimized image as base64
+            const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Generate unique ID
+            const newId = Date.now();
+            
+            // Save to localStorage as base64 (for demo purposes)
+            // In production, you would upload to a server
+            const images = getGalleryImages();
+            images.push({
+                id: newId,
+                src: optimizedDataUrl,
+                alt: file.name.replace(/\.[^/.]+$/, ''),
+                description: ''
+            });
+            
+            saveGalleryImages(images);
+            renderAdminGalleryList();
+            
+            // Clear file input
+            const fileInput = document.getElementById('gallery-image-input');
+            if (fileInput) fileInput.value = '';
+        };
+        
+        img.src = e.target.result;
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+// Save gallery settings
+function saveGalleryTransitionTime() {
+    const transitionTime = parseInt(document.getElementById('gallery-transition-time').value) || 5000;
+    saveGallerySettings({ transitionTime: transitionTime });
+}
+
+// Preview gallery
+function previewGallery() {
+    const previewModal = document.createElement('div');
+    previewModal.className = 'preview-modal active';
+    previewModal.id = 'gallery-preview-modal';
+    
+    const images = getGalleryImages();
+    const settings = getGallerySettings();
+    
+    previewModal.innerHTML = `
+        <div class="preview-content">
+            <button class="preview-close" onclick="closePreviewModal()">&times;</button>
+            <div class="gallery-carousel" style="padding: 20px;">
+                <div class="carousel-container" id="preview-carousel">
+                    ${images.map((img, index) => `
+                        <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+                            <img src="${img.src}" alt="${img.alt}">
+                            ${img.description ? `
+                                <div class="carousel-content">
+                                    <h3>${img.alt}</h3>
+                                    <p>${img.description}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="carousel-btn carousel-prev" onclick="previewPrevSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-next" onclick="previewNextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="carousel-indicators" id="preview-indicators">
+                    ${images.map((_, index) => `
+                        <div class="carousel-indicator ${index === 0 ? 'active' : ''}" onclick="previewGoToSlide(${index})"></div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(previewModal);
+    
+    // Start preview carousel
+    let previewSlide = 0;
+    window.previewCarouselInterval = setInterval(() => {
+        previewSlide = (previewSlide + 1) % images.length;
+        updatePreviewSlide(previewSlide);
+    }, settings.transitionTime);
+    
+    window.previewGoToSlide = function(index) {
+        previewSlide = index;
+        updatePreviewSlide(index);
+        clearInterval(window.previewCarouselInterval);
+        window.previewCarouselInterval = setInterval(() => {
+            previewSlide = (previewSlide + 1) % images.length;
+            updatePreviewSlide(previewSlide);
+        }, settings.transitionTime);
+    };
+    
+    window.updatePreviewSlide = function(index) {
+        const slides = previewModal.querySelectorAll('.carousel-slide');
+        const indicators = previewModal.querySelectorAll('.carousel-indicator');
+        
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        
+        indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === index);
+        });
+    };
+    
+    window.previewPrevSlide = function() {
+        previewSlide = (previewSlide - 1 + images.length) % images.length;
+        updatePreviewSlide(previewSlide);
+        clearInterval(window.previewCarouselInterval);
+        window.previewCarouselInterval = setInterval(() => {
+            previewSlide = (previewSlide + 1) % images.length;
+            updatePreviewSlide(previewSlide);
+        }, settings.transitionTime);
+    };
+    
+    window.previewNextSlide = function() {
+        previewSlide = (previewSlide + 1) % images.length;
+        updatePreviewSlide(previewSlide);
+        clearInterval(window.previewCarouselInterval);
+        window.previewCarouselInterval = setInterval(() => {
+            previewSlide = (previewSlide + 1) % images.length;
+            updatePreviewSlide(previewSlide);
+        }, settings.transitionTime);
+    };
+    
+    // Close on background click
+    previewModal.addEventListener('click', function(e) {
+        if (e.target === previewModal) {
+            closePreviewModal();
+        }
+    });
+}
+
+// Close preview modal
+function closePreviewModal() {
+    const modal = document.getElementById('gallery-preview-modal');
+    if (modal) {
+        if (window.previewCarouselInterval) {
+            clearInterval(window.previewCarouselInterval);
+        }
+        modal.remove();
+    }
+}
+
 // Inicializar todo
 document.addEventListener('DOMContentLoaded', function() {
     initializeNews();
     renderNews();
     updateAdminPanel();
+    
+    // Initialize gallery
+    initializeGallery();
+    renderGallery();
+    renderTeacherGallery();
     
     // Event listeners del admin
     const loginForm = document.getElementById('login-form');

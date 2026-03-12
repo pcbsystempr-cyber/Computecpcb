@@ -90,6 +90,36 @@
                 </div>
             </div>
 
+            <!-- Imágenes Representativas del Taller - Dentro de ¿Qué es COMPUTEC? -->
+            <div class="gallery-in-section">
+                <h3><i class="fas fa-images"></i> Imágenes Representativas del Taller</h3>
+                <p class="section-intro">Explora nuestra galería de fotografías del taller, actividades e instalaciones</p>
+                
+                <div class="gallery-carousel-section">
+                    <div class="carousel-container" id="gallery-carousel">
+                        <!-- Las imágenes se cargarán dinámicamente -->
+                    </div>
+                    
+                    <!-- Controles del carrusel -->
+                    <button class="carousel-btn carousel-prev" id="carousel-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-btn carousel-next" id="carousel-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <!-- Indicadores de posición -->
+                    <div class="carousel-indicators" id="carousel-indicators">
+                        <!-- Los indicadores se generarán dinámicamente -->
+                    </div>
+                </div>
+                
+                <!-- Miniaturas -->
+                <div class="gallery-thumbnails" id="gallery-thumbnails">
+                    <!-- Las miniaturas se cargarán dinámicamente -->
+                </div>
+            </div>
+
             <div class="teacher-info">
                 <h3><i class="fas fa-chalkboard-teacher"></i> Información del Maestro</h3>
                 <div class="teacher-card">
@@ -100,6 +130,13 @@
                         <h4>Roberto Vázquez Vázquez</h4>
                         <p><i class="fas fa-award"></i> <strong>17 años de experiencia</strong></p>
                         <p><i class="fas fa-envelope"></i> <a href="mailto:de167766@miescuela.pr">de167766@miescuela.pr</a></p>
+                    </div>
+                </div>
+                
+                <!-- Galería de Imágenes del Maestro/Taller -->
+                <div class="teacher-gallery">
+                    <div class="teacher-gallery-grid" id="teacher-gallery-grid">
+                        <!-- Imágenes adicionales del taller/maestro se cargarán aquí -->
                     </div>
                 </div>
             </div>
@@ -346,7 +383,28 @@
             <p class="section-intro">Descubre los increíbles proyectos de programación creados por nuestros estudiantes</p>
 
             <div class="projects-grid">
-                <div class="project-card">
+                <div class="project-card featured-project">
+                    <div class="project-badge"><i class="fas fa-crown"></i> Destacado</div>
+                    <div class="project-image">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>PCB System</h3>
+                        <p class="project-author">Por: Estudiantes de COMPUTEC</p>
+                        <p class="project-description">
+                            Sistema web institucional de la Escuela Pablo Colón Berdecía.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                        </div>
+                        <button class="view-project-btn" onclick="window.open('https://pcbsystempr-cyber.github.io/pcbsystem/', '_blank')">Ver Proyecto</button>
+                    </div>
+                </div>
+
+                <div class="project-card featured-project">
+                    <div class="project-badge"><i class="fas fa-trophy"></i> Destacado</div>
                     <div class="project-image">
                         <i class="fas fa-door-open"></i>
                     </div>
@@ -361,49 +419,12 @@
                             <span class="tech-tag">CSS3</span>
                             <span class="tech-tag">JavaScript</span>
                         </div>
-                        <button class="view-project-btn" onclick="viewProject('casa-abierta')">Ver Proyecto</button>
+                        <button class="view-project-btn" onclick="window.open('https://pcbsystempr-cyber.github.io/Casa-Abierta/', '_blank')">Ver Proyecto</button>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Gaming Day</h3>
-                        <p class="project-author">Por: Estudiantes de COMPUTEC</p>
-                        <p class="project-description">
-                            Sitio web oficial del Gaming Day de COMPUTEC con información de torneos, premios y registro de participantes.
-                        </p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                        <button class="view-project-btn" onclick="viewProject('gaming-day')">Ver Proyecto</button>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <i class="fas fa-school"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Página Principal Pablo Colón Berdecía</h3>
-                        <p class="project-author">Por: Estudiantes de COMPUTEC</p>
-                        <p class="project-description">
-                            Sitio web oficial de la Escuela Superior Vocacional Pablo Colón Berdecía con información institucional completa.
-                        </p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                        <button class="view-project-btn" onclick="viewProject('pablo-colon')">Ver Proyecto</button>
-                    </div>
-                </div>
-
-                <div class="project-card">
+                <div class="project-card featured-project">
+                    <div class="project-badge"><i class="fas fa-heart"></i> Destacado</div>
                     <div class="project-image">
                         <i class="fas fa-heart"></i>
                     </div>
@@ -418,28 +439,10 @@
                             <span class="tech-tag">CSS3</span>
                             <span class="tech-tag">JavaScript</span>
                         </div>
-                        <button class="view-project-btn" onclick="viewProject('apoyo-socioemocional')">Ver Proyecto</button>
+                        <button class="view-project-btn" onclick="window.open('https://pcbsystempr-cyber.github.io/Unidad-de-ApoyoSocioEmocional/', '_blank')">Ver Proyecto</button>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Servicio Técnico</h3>
-                        <p class="project-author">Por: Estudiantes de COMPUTEC</p>
-                        <p class="project-description">
-                            Sistema web para solicitar servicios técnicos, con formularios de solicitud y seguimiento de tickets para maestros.
-                        </p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                        <button class="view-project-btn" onclick="viewProject('servicio-tecnico')">Ver Proyecto</button>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
