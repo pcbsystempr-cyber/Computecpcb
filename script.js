@@ -25,7 +25,7 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 // Credenciales de admin (en producción debería usarse autenticación server-side)
 const ADMIN_CREDENTIALS = {
     username: 'admin',
-    password: 'computec2026'
+    password: 'Computec'
 };
 
 // Modal de login
@@ -293,8 +293,10 @@ function handleModalLogin(e) {
         localStorage.setItem('adminLoggedIn', 'true');
         errorMsg.style.display = 'none';
         closeAdminModalBtn();
-        // Redirigir a admin.html
-        window.location.href = 'admin.html';
+        // Redirigir a admin.html después de cerrar el modal
+        setTimeout(function() {
+            window.location.href = 'admin.html';
+        }, 100);
     } else {
         errorMsg.style.display = 'block';
     }

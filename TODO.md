@@ -1,40 +1,19 @@
-# TODO: Add Featured Projects Section
+# TODO: Hacer pestañas visibles/separadas del header en admin
+✅ **Plan aprobado por usuario**
 
-## Plan Implementation Steps
+## Pasos del plan (1/4 completado):
 
-### ✅ Step 1: Create this TODO.md file [COMPLETED]
+### ✅ Paso 1: Crear TODO.md [COMPLETADO]
 
-### ✅ Step 2: Edit index.html [COMPLETED]
-- Added "Proyectos Destacados" subsection in #proyectos section
-- Highlighted 3 projects: Casa Abierta, Gaming Day, Servicio Técnico
-- Placed before existing projects grid
+### ✅ Paso 2: Leer admin-header-section.css actual [COMPLETADO]
 
-### ✅ Step 3: Edit styles.css [COMPLETED]
-- Added featured badge styles (gold glowing badge)
-- Added .projects-featured-grid and .featured-project styles (larger, elevated cards)
-- Fully responsive with dark mode support
+### ✅ Paso 3: Editar admin-header-section.css [COMPLETADO]
+- Agregar `position: sticky; top: 0; z-index: 100; box-shadow`
 
-### ✅ Step 4: Test changes [COMPLETED]
-- Verified responsive design (DevTools mobile view OK)
-- Checked dark mode (gold badges visible, contrasts good)
-- Tested viewProject() buttons (links open correctly)
-- Previewed with browser (smooth animations, hover effects working)
+### ✅ Paso 4: Editar admin.html [COMPLETADO]
+- Cambiar `.admin-container { margin: 140px auto 2rem; }`
 
-### ✅ Step 5: Update TODO.md with completion status [COMPLETED]
-- All steps marked complete
-- Final testing passed
+### ✅ Paso 5: Probar resultado [COMPLETADO]
 
-### ✅ Step 6: Complete task [COMPLETED]
-
-**Status:** ✅ TASK COMPLETE - Proyectos Destacados added successfully!
-
-**Features Added:**
-- ✨ "Proyectos Destacados" subsection with 3 highlighted projects
-- 🏆 Gold glowing badges with icons (crown, trophy, tools)
-- 🎨 Larger featured cards with enhanced hover animations
-- 📱 Fully responsive design
-- 🌙 Dark mode compatible
-- 🔗 Existing JS functionality preserved
-
-**Preview:** Open index.html and scroll to #proyectos section to see the new featured projects!"
+### ✅ Paso 6: Task completada exitosamente 🎉
 

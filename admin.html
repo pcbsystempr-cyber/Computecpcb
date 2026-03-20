@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - COMPUTEC</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-header-section.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -39,25 +40,10 @@
             gap: 10px;
         }
 
-        .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .back-btn:hover {
-            background: #0ea5e9;
-            border-color: #0ea5e9;
-        }
-
-        /* Container & Content */
+        /* Container & Content - FIXED: Margin-top optimizado (menos distancia) */
         .admin-container {
             max-width: 1200px;
-            margin: 2rem auto;
+            margin: 100px auto 2rem;
             padding: 0 1.5rem;
         }
 
@@ -68,41 +54,6 @@
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-        }
-
-        /* Header Section */
-        .admin-header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            color: white;
-        }
-
-        .admin-header-section h2 {
-            color: white;
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-
-        .logout-btn:hover {
-            background: #dc2626;
         }
 
         /* Tabs Styles */
@@ -632,19 +583,16 @@
     </style>
 </head>
 <body>
-    <header class="admin-header">
-        <h1><i class="fas fa-cog"></i> Panel de Administración - COMPUTEC</h1>
+    <header class="admin-header-section">
         <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al sitio</a>
+        <h2>Panel de Administración</h2>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
     </header>
 
     <div class="admin-container">
         <div class="admin-content">
-            <div class="admin-header-section">
-                <h2>Panel de Administración</h2>
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                </button>
-            </div>
 
             <!-- Tabs Navigation -->
             <div class="admin-tabs">
@@ -769,7 +717,7 @@
         // Credenciales de admin
         const ADMIN_CREDENTIALS = {
             username: 'admin',
-            password: 'computec2026'
+            password: 'Computec'
         };
 
         // Obtener noticias
